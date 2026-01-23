@@ -1,6 +1,7 @@
 package com.bms.bms_backend.service;
 
 import com.bms.bms_backend.dto.CreateUserRequest;
+import com.bms.bms_backend.dto.UserResponse;
 import com.bms.bms_backend.model.User;
 import com.bms.bms_backend.repository.UserRepository;
 import com.bms.bms_backend.service.UserService;
@@ -14,7 +15,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public User createUser(CreateUserRequest request) {
+    public UserResponse createUser(CreateUserRequest request) {
         // convert request(DTO) -> entity object
         User user = User.builder()
                 .name(request.getName())
@@ -23,22 +24,26 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         // save to DB using JPA
-        return userRepository.save(user);
+        User saved = userRepository.save(user);
+        return convertToResponse(saved);
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserResponse> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(this::convertToResponse)
+                .toList();
     }
 
     @Override
-    public User getUserById(Long id){
-        return userRepository.findById(id)
+    public UserResponse getUserById(Long id){
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id : " + id));
+        return convertToResponse(user);
     }
 
     @Override
-    public User updateUser(Long id, CreateUserRequest request){
+    public UserResponse updateUser(Long id, CreateUserRequest request){
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id : " + id));
 
@@ -47,7 +52,8 @@ public class UserServiceImpl implements UserService {
         existingUser.setName(request.getName());
         existingUser.setPhone(request.getPhone());
 
-        return userRepository.save(existingUser);
+        User saved =  userRepository.save(existingUser);
+        return convertToResponse(saved);
     }
 
     @Override
@@ -56,5 +62,14 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("User not found with id : " + id);
         }
         userRepository.deleteById(id);
+    }
+
+    private UserResponse convertToResponse(User user){
+        return UserResponse.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getName())
+                .phone(user.getName())
+                .build();
     }
 }
