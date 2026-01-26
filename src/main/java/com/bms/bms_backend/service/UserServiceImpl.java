@@ -68,8 +68,8 @@ public class UserServiceImpl implements UserService {
         return UserResponse.builder()
                 .id(user.getId())
                 .name(user.getName())
-                .email(user.getName())
-                .phone(user.getName())
+                .email(user.getEmail())
+                .phone(user.getPhone())
                 .build();
     }
 }
