@@ -4,6 +4,7 @@ import com.bms.bms_backend.dto.CreateMovieRequest;
 import com.bms.bms_backend.dto.MovieResponse;
 import com.bms.bms_backend.model.Movie;
 import com.bms.bms_backend.service.MovieService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,7 @@ public class MovieController {
     private final MovieService movieService;
 
     @PostMapping
-    public MovieResponse createMovie(@RequestBody CreateMovieRequest request){
+    public MovieResponse createMovie(@Valid @RequestBody CreateMovieRequest request){
         return movieService.createMovie(request);
     }
 
@@ -31,7 +32,7 @@ public class MovieController {
     }
 
     @PutMapping("/{id}")
-    public MovieResponse updateMovie(@PathVariable Long id, @RequestBody CreateMovieRequest request){
+    public MovieResponse updateMovie(@PathVariable Long id, @Valid @RequestBody CreateMovieRequest request){
         return movieService.updateMovie(id, request);
     }
 

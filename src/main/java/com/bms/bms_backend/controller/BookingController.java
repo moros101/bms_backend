@@ -3,6 +3,7 @@ package com.bms.bms_backend.controller;
 import com.bms.bms_backend.dto.BookingResponse;
 import com.bms.bms_backend.dto.CreateBookingRequest;
 import com.bms.bms_backend.service.BookingService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,7 @@ public class BookingController {
     private final BookingService bookingService;
 
     @PostMapping
-    public BookingResponse createBooking(@RequestBody CreateBookingRequest request) {
+    public BookingResponse createBooking(@Valid @RequestBody CreateBookingRequest request) {
         return bookingService.createBooking(request);
     }
     @GetMapping

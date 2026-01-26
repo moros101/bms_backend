@@ -3,6 +3,7 @@ package com.bms.bms_backend.controller;
 import com.bms.bms_backend.dto.CreateScreenRequest;
 import com.bms.bms_backend.dto.ScreenResponse;
 import com.bms.bms_backend.service.ScreenService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +15,7 @@ import java.util.List;
 public class ScreenController {
     private final ScreenService screenService;
     @PostMapping
-    public ScreenResponse addScreen(@RequestBody CreateScreenRequest request) {
+    public ScreenResponse addScreen(@Valid @RequestBody CreateScreenRequest request) {
         return screenService.addScreen(request);
     }
     @GetMapping

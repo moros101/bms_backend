@@ -50,7 +50,7 @@ public class SeatServiceImpl implements SeatService {
         return SeatResponse.builder()
                 .id(seat.getId())
                 .seatNumber(seat.getSeatNumber())
-                .seatType(seat.getSeatType())
+                .seatType(seat.getSeatType().name())
                 .available(seat.isAvailable())
                 .screenId(seat.getScreen().getId())
                 .screenName(seat.getScreen().getName())

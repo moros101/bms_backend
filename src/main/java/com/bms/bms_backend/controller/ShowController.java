@@ -4,6 +4,7 @@ import com.bms.bms_backend.dto.CreateShowRequest;
 import com.bms.bms_backend.dto.ShowResponse;
 import com.bms.bms_backend.service.ShowService;
 import com.bms.bms_backend.service.ShowServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,7 @@ import java.util.List;
 public class ShowController {
     private final ShowService showService;
     @PostMapping
-    ShowResponse addShow(@RequestBody CreateShowRequest request) {
+    ShowResponse addShow(@Valid @RequestBody CreateShowRequest request) {
         return showService.addShow(request);
     }
     @GetMapping

@@ -3,6 +3,7 @@ package com.bms.bms_backend.exception;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -11,10 +12,10 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 
-@RestControllerAdvice
+@RestControllerAdvice  // applies to all rest controller
 public class GlobalExceptionHandler {
     // resource not found
-    @ExceptionHandler(ResourceNotFoundException.class)
+    @ExceptionHandler(ResourceNotFoundException.class) // handles matching exception type
     public ResponseEntity<ErrorResponse> handleNotFound(ResourceNotFoundException ex, HttpServletRequest req) {
         return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage(), req.getRequestURI());
     }
@@ -38,6 +39,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneric(Exception ex, HttpServletRequest req) {
         return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage(), req.getRequestURI());
+    }
+    // custom validation message
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> handleEnum(Exception ex, HttpServletRequest req) {
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), req.getRequestURI());
+    }
+    // parent exception wrapper for above handler
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleJSONParseError(Exception ex, HttpServletRequest req){
+        return buildResponse(HttpStatus.BAD_REQUEST, ex.getMessage(), req.getRequestURI());
     }
 
     // Utility method
