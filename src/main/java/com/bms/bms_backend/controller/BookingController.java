@@ -1,12 +1,16 @@
 package com.bms.bms_backend.controller;
 
+import com.bms.bms_backend.dto.ApiResponse;
 import com.bms.bms_backend.dto.BookingResponse;
 import com.bms.bms_backend.dto.CreateBookingRequest;
 import com.bms.bms_backend.service.BookingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -16,8 +20,16 @@ public class BookingController {
     private final BookingService bookingService;
 
     @PostMapping
-    public BookingResponse createBooking(@Valid @RequestBody CreateBookingRequest request) {
-        return bookingService.createBooking(request);
+    public ResponseEntity<ApiResponse<BookingResponse>> createBooking(@Valid @RequestBody CreateBookingRequest request) {
+//        return bookingService.createBooking(request);
+        ApiResponse<BookingResponse> response = ApiResponse.<BookingResponse> builder()
+                .status("SUCCESS")
+                .message("Booking created successfully")
+                .data(bookingService.createBooking(request))
+                .timeStamp(LocalDateTime.now())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     @GetMapping
     public List<BookingResponse> getAllBookings() {

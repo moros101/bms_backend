@@ -1,12 +1,17 @@
 package com.bms.bms_backend.controller;
 
+import com.bms.bms_backend.dto.ApiResponse;
 import com.bms.bms_backend.dto.CreateScreenRequest;
 import com.bms.bms_backend.dto.ScreenResponse;
+import com.bms.bms_backend.model.Screen;
 import com.bms.bms_backend.service.ScreenService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -15,8 +20,15 @@ import java.util.List;
 public class ScreenController {
     private final ScreenService screenService;
     @PostMapping
-    public ScreenResponse addScreen(@Valid @RequestBody CreateScreenRequest request) {
-        return screenService.addScreen(request);
+    public ResponseEntity<ApiResponse<ScreenResponse>> addScreen(@Valid @RequestBody CreateScreenRequest request) {
+        ApiResponse<ScreenResponse> response = ApiResponse.<ScreenResponse> builder()
+                .status("SUCCESS")
+                .message("Screen added successfully")
+                .data(screenService.addScreen(request))
+                .timeStamp(LocalDateTime.now())
+                .build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+//        return screenService.addScreen(request);
     }
     @GetMapping
     public List<ScreenResponse> getAllScreens(){

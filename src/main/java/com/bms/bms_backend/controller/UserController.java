@@ -1,13 +1,18 @@
 package com.bms.bms_backend.controller;
 
+import com.bms.bms_backend.dto.ApiResponse;
 import com.bms.bms_backend.dto.CreateUserRequest;
 import com.bms.bms_backend.dto.UserResponse;
 import com.bms.bms_backend.model.User;
 import com.bms.bms_backend.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
@@ -20,9 +25,15 @@ public class UserController {
 
     // create new user (POST /users)
     @PostMapping // map HTTP method
-    public UserResponse createUser(@Valid @RequestBody CreateUserRequest request){
+    public ResponseEntity<ApiResponse<UserResponse>> createUser(@Valid @RequestBody CreateUserRequest request){
         // binds JSON requestBody -> java object(create user request
-        return userService.createUser(request);
+        ApiResponse<UserResponse> response = ApiResponse.<UserResponse>builder()
+                .status("SUCCESS")
+                .message("User created successfully")
+                .data(userService.createUser(request))
+                .timeStamp(LocalDateTime.now())
+                .build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     // get all users (GET /users)
     @GetMapping
@@ -36,8 +47,15 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public UserResponse updateUser(@PathVariable Long id, @Valid @RequestBody CreateUserRequest request){
-        return userService.updateUser(id, request);
+    public ResponseEntity<ApiResponse<UserResponse>> updateUser(@PathVariable Long id, @Valid @RequestBody CreateUserRequest request){
+        ApiResponse<UserResponse> response = ApiResponse.<UserResponse> builder()
+                .status("SUCCESS")
+                .message("User updated successfully")
+                .data(userService.updateUser(id, request))
+                .timeStamp(LocalDateTime.now())
+                .build();
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+//        return userService.updateUser(id, request);
     }
 
     @DeleteMapping("/{id}")
