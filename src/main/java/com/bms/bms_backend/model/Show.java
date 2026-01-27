@@ -22,11 +22,11 @@ public class Show {
     private LocalDateTime endTime;
     private double price;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "screen_id")
     Screen screen;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id")
     Movie movie;
 }

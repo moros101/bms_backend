@@ -22,7 +22,7 @@ public class Seat {
     @Enumerated(EnumType.STRING)
     private SeatType seatType;
     private boolean available;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "screen_id")
     private Screen screen;
 

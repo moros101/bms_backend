@@ -41,7 +41,7 @@ public class ShowServiceImpl implements ShowService {
     }
     @Override
     public List<ShowResponse> getAllShows(){
-        return showRepository.findAll().stream()
+        return showRepository.findAllShows().stream()
                 .map(this::convert)
                 .toList();
     }

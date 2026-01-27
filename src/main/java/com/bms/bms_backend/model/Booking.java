@@ -26,13 +26,13 @@ public class Booking {
     private String status;
     private double totalAmount;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "show_id", nullable = false)
     private Show show;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "booking_seats",
                 joinColumns = @JoinColumn(name = "booking_id"),
                 inverseJoinColumns = @JoinColumn(name = "seat_id")
