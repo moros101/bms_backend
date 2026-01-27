@@ -23,7 +23,7 @@ public class MovieController {
     @PostMapping
     public ResponseEntity<ApiResponse<MovieResponse>> createMovie(@Valid @RequestBody CreateMovieRequest request){
 //        return movieService.createMovie(request);
-        ApiResponse<MovieResponse> response = ApiResponse.<MovieController> builder()
+        ApiResponse<MovieResponse> response = ApiResponse.<MovieResponse> builder()
                 .status("SUCCESS")
                 .message("Movie created successfully")
                 .data(movieService.createMovie(request))
