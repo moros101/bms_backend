@@ -6,6 +6,8 @@ import com.bms.bms_backend.model.Movie;
 import com.bms.bms_backend.repository.MovieRepository;
 import com.bms.bms_backend.service.MovieService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,7 +38,9 @@ public class MovieServiceImpl implements  MovieService {
     }
 
     @Override
+    @Cacheable(value = "movies", key = "#id")
     public MovieResponse getMovieById(Long id){
+        simulateSlowService();
         Movie movie = movieRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("No movie found for id :" + id));
         return convertToResponse(movie);
@@ -58,6 +62,7 @@ public class MovieServiceImpl implements  MovieService {
     }
 
     @Override
+    @CacheEvict(value = "movies", key = "#id")
     public void deleteMovie(Long id){
         if(!movieRepository.existsById(id)){
             throw new RuntimeException("Movie not found with id : " + id);
@@ -73,5 +78,9 @@ public class MovieServiceImpl implements  MovieService {
                 .genre(movie.getGenre())
                 .duration(movie.getDuration())
                 .build();
+    }
+
+    private void simulateSlowService() {
+        try { Thread.sleep(2000); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
     }
 }
