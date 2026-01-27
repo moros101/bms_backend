@@ -3,6 +3,7 @@ package com.bms.bms_backend.controller;
 import com.bms.bms_backend.dto.ApiResponse;
 import com.bms.bms_backend.dto.BookingResponse;
 import com.bms.bms_backend.dto.CreateBookingRequest;
+import com.bms.bms_backend.repository.BookingRepository;
 import com.bms.bms_backend.service.BookingService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookingController {
     private final BookingService bookingService;
+    private final BookingRepository bookingRepository;
 
     @PostMapping
     public ResponseEntity<ApiResponse<BookingResponse>> createBooking(@Valid @RequestBody CreateBookingRequest request) {
@@ -38,5 +40,10 @@ public class BookingController {
     @GetMapping("/{id}")
     public BookingResponse getBookingById(@PathVariable Long id) {
         return bookingService.getBookingById(id);
+    }
+
+    @GetMapping("/countBookingPerMovie")
+    public List<Object[]> countBookingPerMovie(){
+        return bookingRepository.countBookingPerMovieJPQL();
     }
 }

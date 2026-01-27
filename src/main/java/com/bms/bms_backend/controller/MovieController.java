@@ -4,6 +4,7 @@ import com.bms.bms_backend.dto.ApiResponse;
 import com.bms.bms_backend.dto.CreateMovieRequest;
 import com.bms.bms_backend.dto.MovieResponse;
 import com.bms.bms_backend.model.Movie;
+import com.bms.bms_backend.repository.MovieRepository;
 import com.bms.bms_backend.service.MovieService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MovieController {
     private final MovieService movieService;
+    private final MovieRepository movieRepository;
 
     @PostMapping
     public ResponseEntity<ApiResponse<MovieResponse>> createMovie(@Valid @RequestBody CreateMovieRequest request){
@@ -58,5 +60,10 @@ public class MovieController {
     public String deleteMovie(@PathVariable Long id){
         movieService.deleteMovie(id);
         return "Movie deleted successfully!";
+    }
+
+    @GetMapping("/search/{title}")
+    public List<Movie> searchMovies(@PathVariable String title) {
+        return movieRepository.searchMovieByTitleJPQL(title);
     }
 }
