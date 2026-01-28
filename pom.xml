@@ -22,6 +22,7 @@
 		<java.version>17</java.version>
 	</properties>
 
+
 	<dependencies>
 		<!-- Core Spring Boot Starter -->
 		<dependency>
@@ -71,6 +72,22 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-redis</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>io.github.resilience4j</groupId>
+			<artifactId>resilience4j-spring-boot3</artifactId>
+			<version>2.2.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.bucket4j</groupId>
+			<artifactId>bucket4j-core</artifactId>
+			<version>8.10.1</version>
+		</dependency>
+
+
+
+
 
 
 	</dependencies>
