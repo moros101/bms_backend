@@ -26,4 +26,7 @@ public class Seat {
     @JoinColumn(name = "screen_id")
     private Screen screen;
 
+    @Version
+    private Long version; // hibernate automatically updates it
+
 }

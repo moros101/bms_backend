@@ -3,6 +3,7 @@ package com.bms.bms_backend.service;
 import com.bms.bms_backend.dto.BookingResponse;
 import com.bms.bms_backend.dto.CreateBookingRequest;
 import com.bms.bms_backend.dto.SeatResponse;
+import com.bms.bms_backend.exception.ResourceNotFoundException;
 import com.bms.bms_backend.model.Booking;
 import com.bms.bms_backend.model.Seat;
 import com.bms.bms_backend.model.Show;
@@ -11,6 +12,7 @@ import com.bms.bms_backend.repository.BookingRepository;
 import com.bms.bms_backend.repository.SeatRepository;
 import com.bms.bms_backend.repository.ShowRepository;
 import com.bms.bms_backend.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -62,6 +64,19 @@ public class BookingServiceImpl implements  BookingService {
                 .orElseThrow(() -> new RuntimeException("Booking bot found by Id : " + id));
         return convert(booking);
     }
+
+    @Transactional
+    public void bookSeat(Long seatId) {
+        Seat seat = seatRepository.findById(seatId)
+                .orElseThrow(() -> new ResourceNotFoundException("Seat not found with Id : " + seatId));
+
+        if(!seat.isAvailable()) {
+            throw new IllegalStateException("Seat already booked");
+        }
+        seat.setAvailable(false);
+        seatRepository.save(seat);
+    }
+
     private BookingResponse convert(Booking booking) {
         return BookingResponse.builder()
                 .id(booking.getId())
